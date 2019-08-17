@@ -1,5 +1,5 @@
 ### Describtion
-You can add your async task to promise queue in dynamic .  
+You can add async task to promise queue in dynamic and support args transform ref pass .
 It's easy and effective .
 
 For example:  
