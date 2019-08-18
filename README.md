@@ -59,6 +59,66 @@ For example:
 	task finished
 
 
+3. wrapped by a promise :
+```
+let PromiseTaskQueue = require('promise-queue-task');
+let looPromiseTaskQueue = new PromiseTaskQueue();
+
+let getRandomInt = (max) => {
+    return Math.floor(Math.random() * Math.floor(max));
+};
+
+let anotherAsyncMock = () => {
+
+    return new Promise((resolve, reject) => {
+        if (getRandomInt(2) === 1) {
+            resolve();
+        } else {
+            reject();
+        }
+    })
+
+};
+let runLoopTask = () => {
+
+    return new Promise((resolve, reject) => {
+        for (let i = 0; i < 2; i++) {
+            looPromiseTaskQueue.add((next, args) => {
+                setTimeout(() => {
+                    let arg = Object.assign({jobNumber: 1}, args);
+                    console.log("job :" + (arg.jobNumber++));
+                    if (looPromiseTaskQueue.isEmpty()) {
+                        resolve();
+                    } else {
+                        anotherAsyncMock().then(() => {
+                            next(arg)
+                        }).catch(() => {
+                            reject();
+                        })
+
+                    }
+                }, 10);
+
+            })
+        }
+    })
+};
+
+runLoopTask().then(() => {
+    console.log("task finished , you are luck ")
+}).catch(() => {
+    console.log("sorry interrupted")
+});
+```
+console:
+job :1
+job :2
+task finished , you are luck 
+
+or
+
+job :1
+sorry interrupted
 
 
 
