@@ -110,9 +110,9 @@ runLoopTask().then(() => {
     console.log("sorry interrupted")
 });
 ```
-console:
-job :1
-job :2
+console:  
+job :1  
+job :2  
 task finished , you are luck 
 
 or
